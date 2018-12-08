@@ -199,6 +199,11 @@ class DependencyGraph extends EventEmitter {
     // been talking about for stuff like CSS or WASM).
     const resolvedPath = fs.realpathSync(filename);
     const sha1 = this._hasteFS.getSha1(resolvedPath);
+    // vjpr: patch start
+    // When we use `rn-cli.config.js#resolver.resolveRequest`, files we manually resolve
+    //   seems to cause this error. Maybe it is fixed in a later version of Metro.
+    if (!sha1) return '0123456789012345678901234567890123456789' // DUMMY
+    // vjpr: patch end
 
     if (!sha1) {
       throw new ReferenceError(`SHA-1 for file ${filename} is not computed`);
